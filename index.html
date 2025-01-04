@@ -3,24 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>iOS Large Title Effect</title>
     <style>
         body, html {
             margin: 0;
             padding: 0;
-            height: 200vh; /* Allow scrolling for demo */
+            height: 200vh; /* For scrolling */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #f9f9f9;
-            color: #000000;
+            background-color: #000000;
+            color: white;
         }
 
         .navbar {
             position: fixed;
             top: 0;
             width: 100%;
-            height: 64px;
-            background-color: transparent;  /* Transparent at start */
+            height: 60px;
+            background-color: #000000;  /* Solid black */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -30,30 +29,23 @@
             z-index: 100;
         }
 
-        .navbar.solid {
-            background-color: #000000;  /* Solid black when scrolled */
-            color: white;
-        }
-
         .large-title {
             font-size: 40px;
             font-weight: bold;
-            margin: 96px 20px 20px;
-            line-height: 64px;  /* Matches navbar height */
-            transition: opacity 0.2s ease;
+            margin: 80px 20px 20px;
+            line-height: 60px;  /* Matches navbar height */
         }
 
         .content {
-            margin-top: 20px;
+            margin-top: 40px;
             padding: 20px;
         }
 
         /* Glassmorphic effect */
         .glass {
-            background-color: rgba(28, 28, 30, 0.8);
+            background-color: rgba(28, 28, 30, 0.8); /* Glass effect */
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
@@ -69,7 +61,6 @@
     <div class="content">
         <p>Scroll down to see how the navbar adopts the title.</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tristique orci nec nisl venenatis, vitae suscipit nisl convallis.</p>
-        <p>Keep scrolling to observe the glass effect on the navbar.</p>
     </div>
 
     <script>
@@ -79,15 +70,13 @@
         // Intersection Observer to detect when the title is covered
         const observer = new IntersectionObserver(([entry]) => {
             if (!entry.isIntersecting) {
-                navbar.classList.add("solid");
                 navbar.textContent = "Installed Apps";
             } else {
-                navbar.classList.remove("solid");
                 navbar.textContent = "";
             }
         }, {
             threshold: 0,
-            rootMargin: "-64px 0px 0px 0px"  // Trigger when the navbar touches the title
+            rootMargin: "-60px 0px 0px 0px"  // Triggers at navbar height
         });
 
         observer.observe(largeTitle);
