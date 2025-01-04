@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>iOS Large Title Effect</title>
     <style>
         body, html {
             margin: 0;
             padding: 0;
-            height: 200vh; /* For scrolling */
+            height: 200vh; /* Allow scrolling for demo */
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #000000;
-            color: white;
+            background-color: #f9f9f9;
+            color: #000000;
         }
 
         .navbar {
             position: fixed;
             top: 0;
             width: 100%;
-            height: 60px;
-            background-color: transparent; /* Transparent at the start */
+            height: 64px;
+            background-color: transparent;  /* Transparent at start */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -29,71 +30,71 @@
             z-index: 100;
         }
 
+        .navbar.solid {
+            background-color: #000000;  /* Solid black when scrolled */
+            color: white;
+        }
+
         .large-title {
             font-size: 40px;
             font-weight: bold;
-            margin: 80px 20px 0px;
-            line-height: 60px;
-            transition: transform 0.3s ease;
+            margin: 96px 20px 20px;
+            line-height: 64px;  /* Matches navbar height */
+            transition: opacity 0.2s ease;
         }
 
         .content {
-            margin-top: 40px;
+            margin-top: 20px;
             padding: 20px;
         }
 
         /* Glassmorphic effect */
         .glass {
-            background-color: rgba(28, 28, 30, 0.8); /* Darker glass effect */
+            background-color: rgba(28, 28, 30, 0.8);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Solid black for navbar when title disappears */
-        .solid {
-            background-color: #000000;
         }
     </style>
 </head>
 <body>
 
-    <div class="navbar" id="navbar"> </div>
+    <!-- Navbar -->
+    <div class="navbar" id="navbar"></div>
 
+    <!-- Large Title -->
     <div class="large-title" id="largeTitle">Installed Apps</div>
 
+    <!-- Main Content -->
     <div class="content">
-        <p>Here is where the content of the page would be. Scroll down to see the effect of the navbar overlapping the large title.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tristique orci nec nisl venenatis, vitae suscipit nisl convallis. Integer quis velit risus. Vivamus vitae ligula a odio iaculis dictum. Nam non volutpat nisi, id tempor dui.</p>
-        <p>Keep scrolling to see the navbar change color and adopt the title.</p>
+        <p>Scroll down to see how the navbar adopts the title.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tristique orci nec nisl venenatis, vitae suscipit nisl convallis.</p>
+        <p>Keep scrolling to observe the glass effect on the navbar.</p>
     </div>
 
     <script>
         const navbar = document.getElementById("navbar");
         const largeTitle = document.getElementById("largeTitle");
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                // When the title is fully hidden by the navbar, add solid black
-                if (entry.boundingClientRect.bottom <= 60) {
-                    navbar.classList.add("solid");
-                    navbar.textContent = "Installed Apps";
-                } else {
-                    navbar.classList.remove("solid");
-                    navbar.textContent = "";
-                }
-            });
+        // Intersection Observer to detect when the title is covered
+        const observer = new IntersectionObserver(([entry]) => {
+            if (!entry.isIntersecting) {
+                navbar.classList.add("solid");
+                navbar.textContent = "Installed Apps";
+            } else {
+                navbar.classList.remove("solid");
+                navbar.textContent = "";
+            }
         }, {
             threshold: 0,
+            rootMargin: "-64px 0px 0px 0px"  // Trigger when the navbar touches the title
         });
 
         observer.observe(largeTitle);
 
+        // Scroll detection for glass effect
         window.addEventListener("scroll", function() {
-            const scrollPosition = window.scrollY;
-
-            // Glassmorphic effect when overlapping content
-            if (scrollPosition > 180) {
+            if (window.scrollY > 180) {
                 navbar.classList.add("glass");
             } else {
                 navbar.classList.remove("glass");
