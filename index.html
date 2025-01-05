@@ -86,30 +86,32 @@
 
         // Intersection Observer to detect title coverage
         const observer = new IntersectionObserver(([entry]) => {
-            if (entry.boundingClientRect.bottom <= 70) {
-                // Large title fades out, navbar title fades in
+            // When the large title is almost fully covered
+            if (entry.boundingClientRect.bottom <= 80) {
                 largeTitle.classList.add("fade-out");
                 navbarTitle.classList.add("visible");
             } else {
-                // Reset when large title reappears (scroll up)
                 largeTitle.classList.remove("fade-out");
                 navbarTitle.classList.remove("visible");
             }
         }, {
             threshold: 0,
-            rootMargin: "-55px 0px 0px 0px"  // Trigger earlier to allow smooth transition
+            rootMargin: "-48px 0px 0px 0px"  // Earlier trigger, right before overlap
         });
 
         observer.observe(largeTitle);
 
-        // Glassmorphic effect for navbar after further scrolling
-        window.addEventListener("scroll", function() {
-            const navbar = document.querySelector(".navbar");
-            if (window.scrollY > 180) {
-                navbar.classList.add("glass");
-            } else {
-                navbar.classList.remove("glass");
+        // Force reset when scrolling to the top
+        window.addEventListener("scroll", () => {
+            if (window.scrollY === 0) {
+                largeTitle.classList.remove("fade-out");
+                navbarTitle.classList.remove("visible");
             }
+        });
+
+        // Ensure observer resets properly if needed on page resize
+        window.addEventListener("resize", () => {
+            observer.observe(largeTitle);
         });
     </script>
 
