@@ -19,7 +19,7 @@
             top: 0;
             width: 100%;
             height: 60px;
-            background-color: #000000;  /* Solid black */
+            background-color: #000000;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -29,11 +29,27 @@
             z-index: 100;
         }
 
+        .navbar-title {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            position: absolute;
+        }
+
+        .navbar-title.visible {
+            opacity: 1;
+        }
+
         .large-title {
             font-size: 40px;
             font-weight: bold;
             margin: 80px 20px 20px;
-            line-height: 60px;  /* Matches navbar height */
+            line-height: 60px;
+            opacity: 1;
+            transition: opacity 0.2s ease;
+        }
+
+        .large-title.fade-out {
+            opacity: 0;
         }
 
         .content {
@@ -41,9 +57,8 @@
             padding: 20px;
         }
 
-        /* Glassmorphic effect */
         .glass {
-            background-color: rgba(28, 28, 30, 0.8); /* Glass effect */
+            background-color: rgba(28, 28, 30, 0.8);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
@@ -52,7 +67,9 @@
 <body>
 
     <!-- Navbar -->
-    <div class="navbar" id="navbar"></div>
+    <div class="navbar">
+        <div class="navbar-title" id="navbarTitle">Installed Apps</div>
+    </div>
 
     <!-- Large Title -->
     <div class="large-title" id="largeTitle">Installed Apps</div>
@@ -61,28 +78,34 @@
     <div class="content">
         <p>Scroll down to see how the navbar adopts the title.</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tristique orci nec nisl venenatis, vitae suscipit nisl convallis.</p>
+        <p>Keep scrolling to observe the glass effect on the navbar.</p>
     </div>
 
     <script>
-        const navbar = document.getElementById("navbar");
+        const navbarTitle = document.getElementById("navbarTitle");
         const largeTitle = document.getElementById("largeTitle");
 
-        // Intersection Observer to detect when the title is covered
+        // Intersection Observer to detect title coverage
         const observer = new IntersectionObserver(([entry]) => {
-            if (!entry.isIntersecting) {
-                navbar.textContent = "Installed Apps";
+            if (entry.boundingClientRect.bottom <= 65) {
+                // Large title fades out, navbar title fades in
+                largeTitle.classList.add("fade-out");
+                navbarTitle.classList.add("visible");
             } else {
-                navbar.textContent = "";
+                // Reset when large title is visible
+                largeTitle.classList.remove("fade-out");
+                navbarTitle.classList.remove("visible");
             }
         }, {
             threshold: 0,
-            rootMargin: "-60px 0px 0px 0px"  // Triggers at navbar height
+            rootMargin: "-58px 0px 0px 0px"  // Trigger just before full overlap
         });
 
         observer.observe(largeTitle);
 
-        // Scroll detection for glass effect
+        // Glassmorphic effect when scrolling down further
         window.addEventListener("scroll", function() {
+            const navbar = document.querySelector(".navbar");
             if (window.scrollY > 180) {
                 navbar.classList.add("glass");
             } else {
