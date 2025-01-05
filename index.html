@@ -78,7 +78,6 @@
     <div class="content">
         <p>Scroll down to see how the navbar adopts the title.</p>
         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tristique orci nec nisl venenatis, vitae suscipit nisl convallis.</p>
-        <p>Keep scrolling to observe the glass effect on the navbar.</p>
     </div>
 
     <script>
@@ -87,23 +86,23 @@
 
         // Intersection Observer to detect title coverage
         const observer = new IntersectionObserver(([entry]) => {
-            if (entry.boundingClientRect.bottom <= 65) {
+            if (entry.boundingClientRect.bottom <= 70) {
                 // Large title fades out, navbar title fades in
                 largeTitle.classList.add("fade-out");
                 navbarTitle.classList.add("visible");
             } else {
-                // Reset when large title is visible
+                // Reset when large title reappears (scroll up)
                 largeTitle.classList.remove("fade-out");
                 navbarTitle.classList.remove("visible");
             }
         }, {
             threshold: 0,
-            rootMargin: "-58px 0px 0px 0px"  // Trigger just before full overlap
+            rootMargin: "-55px 0px 0px 0px"  // Trigger earlier to allow smooth transition
         });
 
         observer.observe(largeTitle);
 
-        // Glassmorphic effect when scrolling down further
+        // Glassmorphic effect for navbar after further scrolling
         window.addEventListener("scroll", function() {
             const navbar = document.querySelector(".navbar");
             if (window.scrollY > 180) {
